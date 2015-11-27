@@ -54,8 +54,9 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                     var data = make_multipart_data("file_name", text_base64, "5510726241")
                     console.log(data)
                 }
-                if( l > 3 ) 
+                if( l > 3 ) { 
                     break
+                }
             }
 
             response.success(result)
