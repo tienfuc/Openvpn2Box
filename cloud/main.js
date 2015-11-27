@@ -16,7 +16,7 @@ function make_multipart_data(file_name, file_data, folder_id) {
     var j3 = JSON.stringify(o3)
     var b3 = new Buffer(j3, 'utf8');
 
-    var s4 = "Content-Disposition: form-data; name=\"file\"; filename=\""+file_name+"\"\r\n";
+    var s4 = "\r\nContent-Disposition: form-data; name=\"file\"; filename=\""+file_name+"\"\r\n";
     var b4 = new Buffer(s4, 'utf8');
 
     var s5 = "Content-Type: text/plain\r\n\r\n";
