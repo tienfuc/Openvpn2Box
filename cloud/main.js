@@ -35,8 +35,8 @@ function make_multipart_data(file_name, file_data, folder_id) {
 Parse.Cloud.define("updateOvpns", function(request, response) {
      Parse.Cloud.httpRequest({
         method: 'GET',
-        //url: 'http://www.vpngate.net/api/iphone/',
-        url: 'http://requestb.in/z0xyfsz0',
+        url: 'http://www.vpngate.net/api/iphone/',
+        //url: 'http://requestb.in/z0xyfsz0',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
