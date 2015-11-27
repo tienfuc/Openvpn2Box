@@ -1,4 +1,35 @@
 //
+//
+function make_multipart_data(file_name, file_data, folder_id) {
+    var boundry = "---------------------------5566neverdie";
+    var content_type = "multipart/form-data; boundary=" + boundry;
+
+    var s1 = "--" + boundry + "\r\n";
+    var b1 = new Buffer(s1, 'utf8');
+            
+    var s2 = "Content-Disposition: form-data; name=\"attributes\"\r\n\r\n";
+    var b2 = new Buffer(s2, 'utf8');
+            
+    var o3 = {"name":file_name, "parent":{"id":folder_id}}
+    var j3 = JSON.stringify(o3)
+    var b3 = new Buffer(j3, 'utf8');
+
+    var s4 = "Content-Disposition: form-data; name=\"file\"; filename=\""+file_name+"\"\r\n";
+    var b4 = new Buffer(s4, 'utf8');
+
+    var s5 = "Content-Type: text/plain\r\n\r\n";
+    var b5 = new Buffer(s5, 'utf8');
+            
+    var b6 = new Buffer(file_data, 'utf8');
+                    
+    var s7 = "\r\n\r\n" + boundry + "--\r\n";
+    var b7 = new Buffer(s7, 'utf8');
+            
+    var form_data= Buffer.concat([b1,b2,b3,b4,b5,b6,b7]);
+
+    return form_data
+}
+
 Parse.Cloud.define("updateOvpns", function(request, response) {
      Parse.Cloud.httpRequest({
         method: 'GET',
@@ -9,7 +40,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         body: request.params
         }).then(function(result) {
             var text_lines = result.text.split("\n")
-            var Buffer = require('buffer').Buffer;
+            //var Buffer = require('buffer').Buffer;
 
             for( var l in text_lines) {
                 text_comma_split = text_lines[l].split(",")
