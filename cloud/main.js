@@ -13,10 +13,10 @@ function make_multipart_data(file_name, file_data, folder_id) {
     var b2 = new Buffer(s2, 'utf8');
             
     var o3 = {"name":file_name, "parent":{"id":folder_id}}
-    var j3 = JSON.stringify(o3)
+    var j3 = JSON.stringify(o3)+"\r\n"
     var b3 = new Buffer(j3, 'utf8');
 
-    var s4 = "\r\nContent-Disposition: form-data; name=\"file\"; filename=\""+file_name+"\"\r\n";
+    var s4 = "Content-Disposition: form-data; name=\"file\"; filename=\""+file_name+"\"\r\n";
     var b4 = new Buffer(s4, 'utf8');
 
     var s5 = "Content-Type: text/plain\r\n\r\n";
@@ -28,7 +28,7 @@ function make_multipart_data(file_name, file_data, folder_id) {
     var b7 = new Buffer(s7, 'utf8');
             
     //var form_data= Buffer.concat(b1,b2,b3,b4,b5,b6,b7);
-    var form_data2 = s1+s2+j3+s4+s5+file_data+s7
+    var form_data2 = s1+s2+j3+s1+s4+s5+file_data+s7
     
     console.log(form_data2)
 
