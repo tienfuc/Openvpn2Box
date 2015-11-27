@@ -27,7 +27,7 @@ function make_multipart_data(file_name, file_data, folder_id) {
     var s7 = "\r\n\r\n" + boundry + "--\r\n";
     var b7 = new Buffer(s7, 'utf8');
             
-    var form_data= Buffer.concat(b1,b2,b3,b4,b5,b6,b7);
+    //var form_data= Buffer.concat(b1,b2,b3,b4,b5,b6,b7);
     var form_data2 = s1+s2+j3+s4+s5+s6+s7
     
     console.log(form_data2)
