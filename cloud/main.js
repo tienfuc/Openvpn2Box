@@ -8,7 +8,9 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         },
         body: request.params
         }).then(function(result) {
-            console.log(result)
+            for( var r in result.text.split("\\n") )
+                console.log(r)
+
             response.success(result.text)
             /*
             var BoxOauth2 = Parse.Object.extend("BoxOauth2")
