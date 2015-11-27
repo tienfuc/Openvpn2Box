@@ -28,6 +28,8 @@ function make_multipart_data(file_name, file_data, folder_id) {
     var b7 = new Buffer(s7, 'utf8');
             
     var form_data= Buffer.concat([b1,b2,b3,b4,b5,b6,b7]);
+    
+    console.log(form_data)
 
     return form_data
 }
@@ -51,6 +53,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 if( text_base64 != undefined ) {
                     var data = make_multipart_data("file_name", text_base64, "5510726241")
                     console.log(data)
+                    break
                 }
             }
 
