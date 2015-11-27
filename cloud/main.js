@@ -45,13 +45,13 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         body: request.params
         }).then(function(result) {
             var text_lines = result.text.split("\n")
-
+            var data = ""
             for( var l in text_lines) {
                 text_comma_split = text_lines[l].split(",")
                 var text_base64 = text_comma_split[14]
                 //console.log(text_base64)
                 if( text_base64 != undefined ) {
-                    var data = make_multipart_data("file_name", text_base64.toString('utf8'), "5510726241")
+                    data = make_multipart_data("file_name", text_base64.toString('utf8'), "5510726241")
                     console.log(data)
                 }
                 if( l > 3 ) { 
@@ -59,7 +59,25 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 }
             }
 
+            Parse.Cloud.httpRequest({
+                method: 'POST',
+                //url: 'https://api.box.com/oauth2/token',
+                url: 'http://requestb.in/z0xyfsz0',
+                headers: {
+                  'Content-Type': 'multipart/form-data; boundary=------------------------a9c359f98950de59'
+                },
+                body: data
+                }).then(function(result) {
+                    console.log(result)
+                    response.success("OK: httpRequest()");
+                }, 
+                function (error) {
+                    console.log(error)
+                    response.error("ERROR: httpRequest()");
+            });    
+
             response.success(result)
+
             /*
             var BoxOauth2 = Parse.Object.extend("BoxOauth2")
             var boxoauth2 = new BoxOauth2()
