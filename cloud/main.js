@@ -10,8 +10,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         }).then(function(result) {
             console.log(result)
             var split_text = result.text.split("\\n")
-            console.log(split_text[0].slice(0,10))
-            console.log(split_text[1].slice(0,10))
+            console.log(split_text)
 
             response.success(result)
             /*
