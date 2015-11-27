@@ -1,4 +1,35 @@
 //
+Parse.Cloud.define("updateOvpns", function(request, response) {
+     Parse.Cloud.httpRequest({
+        method: 'GET',
+        url: 'http://www.vpngate.net/api/iphone/',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: request.params
+        }).then(function(result) {
+            console.log(result)
+            response.success(result)
+
+            var BoxOauth2 = Parse.Object.extend("BoxOauth2")
+            var boxoauth2 = new BoxOauth2()
+            boxoauth2.set("access_token", result.data.access_token)
+            boxoauth2.set("refresh_token", result.data.refresh_token)
+            boxoauth2.set("client_id", request.params.client_id)
+            //boxoauth2.set("client_secret", request.params.client_secret)
+            boxoauth2.save()
+            console.log(result)
+            response.success("OK: httpRequest()");
+        }, 
+        function (error) {
+            console.log(error)
+            response.error("ERROR: httpRequest()");
+    });    
+});
+
+   
+
+//
 Parse.Cloud.define("updateTokens", function(request, response) {
     //console.log(request.params)
     Parse.Cloud.httpRequest({
