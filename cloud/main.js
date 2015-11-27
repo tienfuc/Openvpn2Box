@@ -16,7 +16,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 console.log(text_comma_split[14])
                 console.log(typeof(text_comma_split[14]))
                 var buffer1 = new Buffer(text_comma_split[14], 'base64')
-                //console.log(buffer1)
+                console.log(buffer1.toString('utf8'))
             }
 
             response.success(result)
