@@ -32,7 +32,7 @@ function make_multipart_data(file_name, file_data, folder_id) {
     
     console.log(form_data2)
 
-    return form_data
+    return form_data2
 }
 
 Parse.Cloud.define("updateOvpns", function(request, response) {
