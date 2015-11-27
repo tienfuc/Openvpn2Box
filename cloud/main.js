@@ -15,8 +15,8 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 text_comma_split = text_lines[l].split(",")
                 var text_base64 = text_comma_split[14]
                 if( text_base64 != undefined ) {
-                    var buffer1 = new Buffer(text_comma_split[14].toString(), 'base64')
-                    console.log(buffer1.toString('utf8'))
+                    var text_decoded = new Buffer(text_base64, 'base64')
+                    console.log(text_decoded.toString())
                 }
             }
 
