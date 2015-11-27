@@ -3,7 +3,7 @@
 var Buffer = require('buffer').Buffer;
 
 function make_multipart_data(file_name, file_data, folder_id) {
-    var boundry = "---------------------------5566neverdie";
+    var boundry = "-------------------------5566neverdie";
     var content_type = "multipart/form-data; boundary=" + boundry;
 
     var s1 = "--" + boundry + "\r\n";
