@@ -37,7 +37,7 @@ function make_multipart_data(file_name, file_data, folder_id) {
 
 Parse.Cloud.define("updateOvpns", function(request, response) {
      Parse.Cloud.httpRequest({
-        method: 'POST',
+        method: 'GET',
         url: 'http://www.vpngate.net/api/iphone/',
         //url: 'http://requestb.in/z0xyfsz0',
         headers: {
@@ -64,6 +64,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 method: 'POST',
                 url: 'https://api.box.com/oauth2/token',
                 //url: 'http://requestb.in/z0xyfsz0',
+                params: data,
                 headers: {
                   'Content-Type': 'multipart/form-data; boundary=-----------------------------5566neverdie'
                 },
