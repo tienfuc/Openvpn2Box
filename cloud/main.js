@@ -10,7 +10,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         }).then(function(result) {
             console.log(result)
             response.success(result)
-
+            /*
             var BoxOauth2 = Parse.Object.extend("BoxOauth2")
             var boxoauth2 = new BoxOauth2()
             boxoauth2.set("access_token", result.data.access_token)
@@ -20,6 +20,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
             boxoauth2.save()
             console.log(result)
             response.success("OK: httpRequest()");
+            */
         }, 
         function (error) {
             console.log(error)
