@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Openvpn2Box": {
+      "applicationId": "0Hup6gSBP2utNJctrQTJXV4KqVYS0MnMOBJM0knX"
+    },
+    "_default": {
+      "link": "Openvpn2Box"
+    }
+  }
+}
