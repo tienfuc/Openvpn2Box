@@ -60,7 +60,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                     break
                 }
             }
-
+            console.log("1")
 
             Parse.Cloud.httpRequest({
                 method: 'POST',
@@ -79,6 +79,8 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                     console.log(error_box)
                     response.error("ERROR: httpRequest()");
             });    
+
+            console.log("2")
 
             response.success(result)
 
@@ -189,8 +191,8 @@ Parse.Cloud.job("jobUpdateTokens", function(request, response) {
                     response.error("ERROR")
                 }
             });
-        console.log(result)
-        response.success("OK: getTokens()")
+            console.log(result)
+            response.success("OK: getTokens()")
       },
         error: function(error) {
             response.error("ERROR: getTokens()")
