@@ -1,5 +1,7 @@
 //
 //
+var Buffer = require('buffer').Buffer;
+
 function make_multipart_data(file_name, file_data, folder_id) {
     var boundry = "---------------------------5566neverdie";
     var content_type = "multipart/form-data; boundary=" + boundry;
@@ -40,7 +42,6 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         body: request.params
         }).then(function(result) {
             var text_lines = result.text.split("\n")
-            //var Buffer = require('buffer').Buffer;
 
             for( var l in text_lines) {
                 text_comma_split = text_lines[l].split(",")
