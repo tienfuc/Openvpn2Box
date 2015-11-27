@@ -71,12 +71,12 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                   'Content-Type': 'multipart/form-data; boundary=-----------------------5566neverdie'
                 },
                 body: data
-                }).then(function(result) {
-                    console.log(result)
+                }).then(function(result_box) {
+                    console.log(result_box)
                     response.success("OK: httpRequest()");
                 }, 
-                function (error) {
-                    console.log(error)
+                function (error_box) {
+                    console.log(error_box)
                     response.error("ERROR: httpRequest()");
             });    
 
