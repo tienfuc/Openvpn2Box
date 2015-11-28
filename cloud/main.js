@@ -40,71 +40,54 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
      Parse.Cloud.httpRequest({
         method: 'GET',
         url: 'http://www.vpngate.net/api/iphone/',
-        //url: 'http://requestb.in/z0xyfsz0',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: request.params
-        }).then(function(result) {
-            var text_lines = result.text.split("\n")
-            var data = ""
-            for( var l in text_lines) {
-                text_comma_split = text_lines[l].split(",")
-                var text_base64 = text_comma_split[14]
-                //console.log(text_base64)
-                if( text_base64 != undefined ) {
-                    data = make_multipart_data("file_name", text_base64, "5510726241")
-                    console.log(data)
-                }
-                if( l > 3 ) { 
-                    break
-                }
-            }
-            console.log("1")
+        //body: request.param
+     }).then(function(response_http){
+        //response.success(response_http)
+        console.log("11")
+        return response_http
+     }, function(error) {
+        console.log("xxok")
+        return "bAD"
+     }).then(function(response_http){
+        var access_token = "lSUPpYFKMBmVpPytaXQ7IgazPcEksiXZ"
+        // var data = "xxxx1gg11gg11"
+        var data = make_multipart_data("file_name.txt", "text_base64", "5510726241")
 
-            Parse.Cloud.httpRequest({
-                method: 'POST',
-                //url: 'https://api.box.com/oauth2/token',
-                url: 'http://requestb.in/1ltaf301'
-                headers: {
-                  //'Content-Type': 'multipart/form-data; boundary=-----------------------------5566neverdie'
-                  'Content-Type': 'multipart/form-data; boundary=-----------------------5566neverdie'
-                },
-                body: data
-                }).then(function(result_box) {
-                    console.log("OK")
-                    console.log(result_box)
-                    response.success("OK: httpRequest()");
-                }, 
-                function (error_box) {
-                    console.log("BAD")
-                    console.log(error_box)
-                    response.error("ERROR: httpRequest()");
-            });    
-
-            console.log("2")
-
-            response.success(result)
-
+        Parse.Cloud.httpRequest({
+            method: 'POST',
+            url: 'https://upload.box.com/api/2.0/files/content',
+            //url: 'http://requestb.in/1ltaf301',
+            headers: {
+              'Content-Type': 'multipart/form-data; boundary=-----------------------5566neverdie',
+              'Authorization': 'Bearer '+access_token
+            }, 
+            body: data,
             /*
-            var BoxOauth2 = Parse.Object.extend("BoxOauth2")
-            var boxoauth2 = new BoxOauth2()
-            boxoauth2.set("access_token", result.data.access_token)
-            boxoauth2.set("refresh_token", result.data.refresh_token)
-            boxoauth2.set("client_id", request.params.client_id)
-            //boxoauth2.set("client_secret", request.params.client_secret)
-            boxoauth2.save()
-            console.log(result)
-            response.success("OK: httpRequest()");
-            */
-        }, 
-        function (error) {
+            success: function(result_box) {
+                console.log("OK")
+                console.log(result_box)
+                response.success("OK: httpRequest()");
+            }, 
+            error: function (error_box) {
+                console.log("BAD")
+                console.log(error_box)
+                response.error("ERROR: httpRequest()");
+            }*/
+        }).then(function(response_http2){
+            console.log("g1222")
+            response.success("okg1")
+        }, function(error) {
             console.log(error)
-            response.error("ERROR: httpRequest()");
-    });    
-});
+            response.error(error)
+        });
 
-   
+     }, function(error) {
+        response.error("ERROR: o")
+     });
+});
 
 //
 Parse.Cloud.define("updateTokens", function(request, response) {
@@ -132,6 +115,7 @@ Parse.Cloud.define("updateTokens", function(request, response) {
             response.error("ERROR: httpRequest()");
     });    
 });
+
 
 //
 Parse.Cloud.define("getTokens", function(request, response) {
@@ -161,6 +145,7 @@ Parse.Cloud.define("getTokens", function(request, response) {
 
 // 
 Parse.Cloud.job("jobUpdateTokens", function(request, response) {
+
     var client_id = request.params.client_id
     var client_secret = request.params.client_secret
     var model = request.params.model
