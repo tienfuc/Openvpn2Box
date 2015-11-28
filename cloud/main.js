@@ -190,7 +190,7 @@ Parse.Cloud.job("jobUpdateTokens", function(request, response) {
                 },
                 error: function(error_updateTokens) {
                     console.log(error_updateTokens)
-                    response.error("ERROR")
+                    response.error("ERROR: updateTokens")
                 }
             });
             console.log(result)
