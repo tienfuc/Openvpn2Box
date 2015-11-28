@@ -72,10 +72,12 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 },
                 body: data
                 }).then(function(result_box) {
+                    console.log("OK")
                     console.log(result_box)
                     response.success("OK: httpRequest()");
                 }, 
                 function (error_box) {
+                    console.log("BAD")
                     console.log(error_box)
                     response.error("ERROR: httpRequest()");
             });    
