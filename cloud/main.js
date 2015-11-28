@@ -132,11 +132,11 @@ Parse.Cloud.define("getTokens", function(request, response) {
     query.equalTo("client_id", client_id)
     query.first({
         success: function(result) {
-        console.log(result)
+        //console.log(result)
         response.success(result)
       },
       error: function (error) {
-        console.log(error)
+        //console.log(error)
         response.error(error)
       }
     });
@@ -179,10 +179,11 @@ Parse.Cloud.job("jobUpdateTokens", function(request, response) {
                 }
             });
             console.log(result)
-            response.success("OK: getTokens()")
+            response.success(result)
       },
         error: function(error) {
-            response.error("ERROR: getTokens()")
+            console.log(error)
+            response.error(error.message)
       }
     });
 });
