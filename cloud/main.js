@@ -65,7 +65,7 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
             Parse.Cloud.httpRequest({
                 method: 'POST',
                 //url: 'https://api.box.com/oauth2/token',
-                url: 'http://requestb.in/z0xyfsz0',
+                url: 'http://requestb.in/1ltaf301'
                 headers: {
                   //'Content-Type': 'multipart/form-data; boundary=-----------------------------5566neverdie'
                   'Content-Type': 'multipart/form-data; boundary=-----------------------5566neverdie'
