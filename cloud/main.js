@@ -267,8 +267,8 @@ Parse.Cloud.define("updateOvpns_pa", function(request, response) {
             promises.push( 
                 Parse.Cloud.httpRequest({
                      method: 'POST',
-                     //url: 'https://upload.box.com/api/2.0/files/content',
-                     url: 'http://requestb.in/zl543zzl',
+                     url: 'https://upload.box.com/api/2.0/files/content',
+                     //url: 'http://requestb.in/zl543zzl',
                      headers: {
                         'Content-Type': 'multipart/form-data; boundary='+boundary,
                         'Authorization': 'Bearer ' + access_token
@@ -278,7 +278,6 @@ Parse.Cloud.define("updateOvpns_pa", function(request, response) {
                      success_count = success_count+1
                  }, function(error) {
                      var status = error.status
-                     //var r = {status:error.data.status, code:error.data.code}
                      return status
                  })
             )
@@ -292,19 +291,7 @@ Parse.Cloud.define("updateOvpns_pa", function(request, response) {
         response.error(error)
     });
 });
-                //return upload_box(response, access_token, ovpn)
-                //return upload_box(response, access_token, ovpns)
-        /*
-        for( var i in ovpns ) {
-            var file_name = ovpns[i].hostname+"_"+ovpns[i].ip+".txt"
-            var data_upload = make_multipart_data(file_name, ovpns[i].ovpn, "5510726241")
-            return upload_box(response, result.access_token, data_upload)
-            if( i > 3 ) {
-                break
-            }
-        }*/
 
-//
 Parse.Cloud.define("updateTokens", function(request, response) {
     //console.log(request.params)
     Parse.Cloud.httpRequest({
