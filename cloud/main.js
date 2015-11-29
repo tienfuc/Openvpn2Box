@@ -1,38 +1,21 @@
 //
 //
 var Buffer = require('buffer').Buffer;
+var boundary = "-----------------------5566neverdie";
 
 function make_multipart_data(file_name, file_data, folder_id) {
-    var boundry = "-----------------------5566neverdie";
-    var content_type = "multipart/form-data; boundary=" + boundry;
-
-    var s1 = "--" + boundry + "\r\n";
-    var b1 = new Buffer(s1, 'utf8');
-            
+    var s1 = "--" + boundary + "\r\n";
     var s2 = "Content-Disposition: form-data; name=\"attributes\"\r\n\r\n";
-    var b2 = new Buffer(s2, 'utf8');
-            
     var o3 = {"name":file_name, "parent":{"id":folder_id}}
-    var j3 = JSON.stringify(o3)+"\r\n"
-    var b3 = new Buffer(j3, 'utf8');
-
+    var s3 = JSON.stringify(o3)+"\r\n"
     var s4 = "Content-Disposition: form-data; name=\"file\"; filename=\""+file_name+"\"\r\n";
-    var b4 = new Buffer(s4, 'utf8');
-
     var s5 = "Content-Type: text/plain\r\n\r\n";
-    var b5 = new Buffer(s5, 'utf8');
-            
-    //var b6 = new Buffer(file_data, 'utf8');
-                    
-    var s7 = "\r\n\r\n--"+ boundry +"--\r\n";
-    var b7 = new Buffer(s7, 'utf8');
+    var s6  = new Buffer(file_data, 'base64').toString();
+    var s7 = "\r\n\r\n--"+ boundary +"--\r\n";
  
-    var buffer1 = new Buffer(file_data, 'base64');
-    //file_data = "IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj"    
-    //var form_data= Buffer.concat(b1,b2,b3,b4,b5,b6,b7);
-    var form_data2 = s1+s2+j3+s1+s4+s5+buffer1.toString()+s7
+    var form_data2 = s1+s2+s3+s1+s4+s5+s6+s7
     
-    console.log(form_data2)
+    //console.log(form_data2)
 
     return form_data2
 }
@@ -57,20 +40,53 @@ function parse_ovpns(text_raw) {
     return ovpns
 }
 
-function upload_box(access_token, data) {
-     Parse.Cloud.httpRequest({
-         method: 'POST',
-         url: 'https://upload.box.com/api/2.0/files/content',
-         headers: {
-             'Content-Type': 'multipart/form-data; boundary=-----------------------5566neverdie',
-         'Authorization': 'Bearer ' + access_token
-         }, 
-         body: data,
-     }).then(function(result){
-         return result
-     }, function(error) {
-         return null
-     });
+
+function upload_box(response, access_token, ovpns) {
+    for(var i = 0; i<3; i++) {
+        var file_name = ovpns[i].hostname+"_"+ovpns[i].ip+".txt"
+        var data_upload = make_multipart_data(file_name, ovpns[i].ovpn, "5510726241")
+
+         Parse.Cloud.httpRequest({
+             method: 'POST',
+             url: 'https://upload.box.com/api/2.0/files/content',
+             //url: 'http://requestb.in/zl543zzl',
+             headers: {
+                'Content-Type': 'multipart/form-data; boundary='+boundary,
+                'Authorization': 'Bearer ' + access_token
+             }, 
+             body: data_upload,
+         }).then(function(result){
+             console.log(result)
+         }, function(error) {
+             console.log(error)
+         });
+    }
+}
+
+function upload_box2(response, access_token, ovpns) {
+    for(var i = 0; i<3; i++) {
+        var file_name = ovpns[i].hostname+"_"+ovpns[i].ip+".txt"
+        var data_upload = make_multipart_data(file_name, ovpns[i].ovpn, "5510726241")
+
+        Parse.Cloud.httpRequest({
+            method: 'POST',
+            url: 'https://upload.box.com/api/2.0/files/content',
+            //url: 'http://requestb.in/zl543zzl',
+            headers: {
+                'Content-Type': 'multipart/form-data; boundary='+boundary,
+                'Authorization': 'Bearer ' + access_token
+            }, 
+            body: data_upload,
+            success: function(result) {
+                console.log(result)
+                //response.success(result)
+            },
+            error: function(error) {
+                console.log(error)
+                //response.error(error)
+            }
+        });
+    }
 }
 
 Parse.Cloud.define("updateOvpns", function(request, response) {
@@ -88,37 +104,34 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
             ).then(function(result_tokens) {
                 var refresh_token = result_tokens.get("refresh_token")
                 var access_token = result_tokens.get("access_token")
-                console.log("access_token")
                 return_data = {"ovpns": result_ovpns.text, "access_token": access_token}
                 //console.log(return_data)
+                console.log("OK: getTokens()")
                 return return_data
-                //response.success("g1122")
             }, function(error) { 
-                //response.error("xj")
-                console.log("bad11")
+                console.log("ERROR: getTokens()")
             }
         ); 
     }, function(error) {
-        console.log("xxok")
-        return "bAD"
+        console.log(error)
     }).then(function(result){
-        console.log(result.ovpns.slice(0,10))
-        console.log(result.access_token)
+        //console.log(result.ovpns.slice(0,50))
+        //console.log(result.access_token)
         var ovpns = parse_ovpns(result.ovpns)   
+        var access_token = result.access_token
+        return upload_box(response, access_token, ovpns)
+        /*
         for( var i in ovpns ) {
             var file_name = ovpns[i].hostname+"_"+ovpns[i].ip+".txt"
-            console.log(ovpns[i])
-            console.log(file_name)
             var data_upload = make_multipart_data(file_name, ovpns[i].ovpn, "5510726241")
-            upload_box(result.access_token, data_upload)
+            return upload_box(response, result.access_token, data_upload)
             if( i > 3 ) {
                 break
             }
-        }
-        response.success("ok")
-
+        }*/
+        response.success("OK: "+ovpns.length+" files parsed.")
     }, function(error) {
-        response.error("ERROR: o")
+        response.error(error)
     });
 });
 
