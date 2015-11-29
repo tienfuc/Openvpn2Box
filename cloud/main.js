@@ -2,6 +2,7 @@
 //
 var Buffer = require('buffer').Buffer;
 var boundary = "-----------------------5566neverdie";
+var _ = require('underscore.js');
 
 function make_multipart_data(file_name, file_data, folder_id) {
     var s1 = "--" + boundary + "\r\n";
@@ -89,7 +90,7 @@ function upload_box2(response, access_token, ovpns) {
     }
 }
 
-Parse.Cloud.define("updateOvpns", function(request, response) {
+Parse.Cloud.define("updateOvpns_sa", function(request, response) {
     Parse.Cloud.httpRequest({
         method: 'GET',
         url: 'http://www.vpngate.net/api/iphone/',
@@ -119,7 +120,180 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
         //console.log(result.access_token)
         var ovpns = parse_ovpns(result.ovpns)   
         var access_token = result.access_token
-        return upload_box(response, access_token, ovpns)
+        var promise = Parse.Promise.as();
+        var success_count = 0
+
+        _.each(ovpns, function(ovpn) {
+            //console.log(ovpn)
+            var file_name = ovpn.hostname+"_"+ovpn.ip+".txt"
+            var data_upload = make_multipart_data(file_name, ovpn.ovpn, "5510726241")
+
+            Parse.Cloud.httpRequest({
+                    method: 'POST',
+                    //url: 'https://upload.box.com/api/2.0/files/content',
+                    url: 'http://requestb.in/zl543zzl',
+                    headers: {
+                        'Content-Type': 'multipart/form-data; boundary='+boundary,
+                        'Authorization': 'Bearer ' + access_token
+                    }, 
+                    body: data_upload,
+                }).then(function(result){
+                    //success_count = success+1
+                    console.log("in pro")
+                    console.log(result)
+                }, function(error) {
+                    console.log("in pro error")
+                    console.log(error)
+                });
+       })
+       //return promise
+    }).then(function(count) {
+        console.log("count")
+        response.success("OK: "+count)
+    }, function(error) {
+        console.log(error)
+        response.error(error)
+    });
+});
+
+Parse.Cloud.define("updateOvpns_", function(request, response) {
+    Parse.Cloud.httpRequest({
+        method: 'GET',
+        url: 'http://www.vpngate.net/api/iphone/',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    }).then(function(result_ovpns){
+         // get new access_token
+        var client_id = "8dp9uu7fi3lm8fv43a8r5clkfi0k7due"
+        var model = "BoxOauth2"
+        return Parse.Cloud.run('getTokens', {"client_id":client_id, "model":model}
+            ).then(function(result_tokens) {
+                var refresh_token = result_tokens.get("refresh_token")
+                var access_token = result_tokens.get("access_token")
+                return_data = {"ovpns": result_ovpns.text, "access_token": access_token}
+                //console.log(return_data)
+                console.log("OK: getTokens()")
+                return return_data
+            }, function(error) { 
+                console.log("ERROR: getTokens()")
+            }
+        ); 
+    }, function(error) {
+        console.log(error)
+    }).then(function(result){
+        //console.log(result.ovpns.slice(0,50))
+        //console.log(result.access_token)
+        var ovpns = parse_ovpns(result.ovpns)   
+        var access_token = result.access_token
+        //var promise = Parse.Promise.as();
+        var success_count = 0
+        var promises = []
+        //ovpns = ovpns.slice(0,2)
+
+        _.each(ovpns, function(ovpn) {
+            //console.log(ovpn)
+            var file_name = ovpn.hostname+"_"+ovpn.ip+".txt"
+            var data_upload = make_multipart_data(file_name, ovpn.ovpn, "5510726241")
+
+            promises.push( 
+                Parse.Cloud.httpRequest({
+                     method: 'POST',
+                     url: 'https://upload.box.com/api/2.0/files/content',
+                     //url: 'http://requestb.in/zl543zzl',
+                     headers: {
+                        'Content-Type': 'multipart/form-data; boundary='+boundary,
+                        'Authorization': 'Bearer ' + access_token
+                     }, 
+                     body: data_upload,
+                 }).then(function(result){
+                     success_count = success_count+1
+                 }, function(error) {
+                     var status = error.status
+                     //var r = {status:error.data.status, code:error.data.code}
+                     return status
+                 })
+            )
+       })
+       return Parse.Promise.when(promises)
+    }).then(function() {
+        console.log(result)
+        response.success(success_count)
+    }, function(error) {
+        console.log(error)
+        response.error(error)
+    });
+});
+Parse.Cloud.define("updateOvpns_pa", function(request, response) {
+    Parse.Cloud.httpRequest({
+        method: 'GET',
+        url: 'http://www.vpngate.net/api/iphone/',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    }).then(function(result_ovpns){
+         // get new access_token
+        var client_id = "8dp9uu7fi3lm8fv43a8r5clkfi0k7due"
+        var model = "BoxOauth2"
+        return Parse.Cloud.run('getTokens', {"client_id":client_id, "model":model}
+            ).then(function(result_tokens) {
+                var refresh_token = result_tokens.get("refresh_token")
+                var access_token = result_tokens.get("access_token")
+                return_data = {"ovpns": result_ovpns.text, "access_token": access_token}
+                //console.log(return_data)
+                console.log("OK: getTokens()")
+                return return_data
+            }, function(error) { 
+                console.log("ERROR: getTokens()")
+            }
+        ); 
+    }, function(error) {
+        console.log(error)
+    }).then(function(result){
+        //console.log(result.ovpns.slice(0,50))
+        //console.log(result.access_token)
+        var ovpns = parse_ovpns(result.ovpns)   
+        var access_token = result.access_token
+        //var promise = Parse.Promise.as();
+        var success_count = 0
+        var promises = []
+        //ovpns = ovpns.slice(0,2)
+
+        _.each(ovpns, function(ovpn) {
+            //console.log(ovpn)
+            var file_name = ovpn.hostname+"_"+ovpn.ip+".txt"
+            var data_upload = make_multipart_data(file_name, ovpn.ovpn, "5510726241")
+
+            promises.push( 
+                Parse.Cloud.httpRequest({
+                     method: 'POST',
+                     //url: 'https://upload.box.com/api/2.0/files/content',
+                     url: 'http://requestb.in/zl543zzl',
+                     headers: {
+                        'Content-Type': 'multipart/form-data; boundary='+boundary,
+                        'Authorization': 'Bearer ' + access_token
+                     }, 
+                     body: data_upload,
+                 }).then(function(result){
+                     success_count = success_count+1
+                 }, function(error) {
+                     var status = error.status
+                     //var r = {status:error.data.status, code:error.data.code}
+                     return status
+                 })
+            )
+       })
+       return Parse.Promise.when(promises)
+    }).then(function() {
+        console.log(result)
+        response.success(success_count)
+    }, function(error) {
+        console.log(error)
+        response.error(error)
+    });
+});
+                //return upload_box(response, access_token, ovpn)
+                //return upload_box(response, access_token, ovpns)
         /*
         for( var i in ovpns ) {
             var file_name = ovpns[i].hostname+"_"+ovpns[i].ip+".txt"
@@ -129,11 +303,6 @@ Parse.Cloud.define("updateOvpns", function(request, response) {
                 break
             }
         }*/
-        response.success("OK: "+ovpns.length+" files parsed.")
-    }, function(error) {
-        response.error(error)
-    });
-});
 
 //
 Parse.Cloud.define("updateTokens", function(request, response) {
